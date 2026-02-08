@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<title>Painel Admin</title>
+<style>
+body {
+  font-family: Arial;
+  background: #111;
+  color: white;
+  text-align: center;
+  padding: 40px;
+}
+textarea {
+  width: 300px;
+  height: 200px;
+}
+button {
+  padding: 10px 20px;
+  margin-top: 10px;
+}
+</style>
+</head>
+<body>
+
+<h1>Painel de Estoque</h1>
+
+<p>Cole os códigos (1 por linha):</p>
+<textarea id="lista"></textarea><br>
+<button onclick="enviar()">Adicionar estoque</button>
+
+<p id="status"></p>
+
+<script>
+async function enviar() {
+  const lista = document.getElementById("lista").value;
+
+  const res = await fetch("/api/adicionar", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ lista })
+  });
+
+  const data = await res.json();
+  document.getElementById("status").innerText =
+    "Adicionados: " + data.adicionados;
+}
+</script>
+
+</body>
+</html>
