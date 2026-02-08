@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<title>Loja Automática</title>
+<style>
+body {
+  font-family: Arial;
+  background: #111;
+  color: white;
+  text-align: center;
+  padding: 40px;
+}
+button {
+  padding: 15px 30px;
+  font-size: 18px;
+  background: #00c853;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.box {
+  background: #1e1e1e;
+  padding: 30px;
+  border-radius: 12px;
+  display: inline-block;
+}
+</style>
+</head>
+<body>
+
+<div class="box">
+  <h1>Produto Digital</h1>
+  <p>Entrega automática após compra</p>
+  <p id="estoque">Carregando estoque...</p>
+  <button onclick="comprar()">Comprar agora</button>
+  <p id="resultado"></p>
+</div>
+
+<script>
+async function carregarEstoque() {
+  const res = await fetch("/api/estoque");
+  const data = await res.json();
+  document.getElementById("estoque").innerText =
+    "Disponíveis: " + data.length;
+}
+
+async function comprar() {
+  const res = await fetch("/api/comprar", { method: "POST" });
+  const data = await res.json();
+
+  if (data.erro) {
+    document.getElementById("resultado").innerText = data.erro;
+  } else {
+    document.getElementById("resultado").innerText =
+      "Seu código: " + data.item;
+  }
+
+  carregarEstoque();
+}
+
+carregarEstoque();
+</script>
+
+</body>
+</html>
